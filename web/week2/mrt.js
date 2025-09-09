@@ -1,16 +1,22 @@
 alert("In this experiment we will measure your response time. You will be shown a series of simple math equations. Answer these equations as quickly and accurately as you can.");
 let start = Date.now();
-let answer1 = prompt("What is 4 + 5?");
+let math = Math.floor(Math.random() * 10) + 1
+let math2 = Math.floor(Math.random() * 10) + 1
+let answer = prompt("What is " + math + " + " + math2 + "?");
 let end = Date.now();
 let responseTime = (end - start) / 1000;
-alert("You answered " + answer1 + " in " + responseTime + " seconds");
+alert("You answered " + answer + " in " + responseTime + " seconds");
 start = Date.now();
-answer = prompt("What is 6 + 7?");
+math = Math.floor(Math.random() * 10) + 1
+math2 = Math.floor(Math.random() * 10) + 1
+answer = prompt("What is " + math + " + " + math2 + "?");
 end = Date.now();
 responseTime = (end - start) / 1000;
 alert("You answered " + answer + " in " + responseTime + " seconds");
 start = Date.now();
-answer = prompt("What is 2 + 9?");
+math = Math.floor(Math.random() * 10) + 1
+math2 = Math.floor(Math.random() * 10) + 1
+answer = prompt("What is " + math + " + " + math2 + "?");
 end = Date.now();
 responseTime = (end - start) / 1000;
 alert("You answered " + answer + " in " + responseTime + " seconds");
