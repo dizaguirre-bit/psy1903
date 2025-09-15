@@ -52,3 +52,11 @@ console.log(courseName.toUpperCase());
 console.log(courseName.indexOf("Psychologists"));
 
 console.log(courseName.replace("Programming", "Coding"));
+
+console.log(5 == 5 && 10 > 1);
+console.log('red' == 'blue' || 1 < 10);
+console.log(20 > 15 < 15);
+console.log(12 % 2 == 0);
+console.log('red' != 'green' || 'orange' == 'purple');
+console.log((10 >= 10) && (false == false) && (20 !== 19));
+console.log(true && true || false);
