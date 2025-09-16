@@ -1,4 +1,4 @@
-/* // Identify elements on the page we will update
+// Identify elements on the page we will update
 let num1 = document.getElementById("num1");
 let num2 = document.getElementById("num2");
 
@@ -10,10 +10,44 @@ let randomNum2 = Math.floor(Math.random() * 10) + 1;
 num1.innerHTML = randomNum1;
 num2.innerHTML = randomNum2
 
+// Generate variables to store references to elements on the page
+let form = document.getElementsByTagName('form')[0];
+let results = document.getElementById('results');
+
+// Start timer
+start = Date.now();
+
 // Listen for form to be submitted
 form.addEventListener('submit', function (event) {
 
-}); */
+    // Prevent the default form submission b
+    event.preventDefault();
+
+    // Collect the response
+    let response = form.elements['response'].value;
+
+    // End timer and create response time variable
+    end = Date.now();
+    responseTime = (end - start) / 1000;
+
+    // Generate variables related to answer
+    let correctAnswer = (randomNum1 + randomNum2);
+    let correctResponse = "Your response was CORRECT"
+    let incorrectResponse = "Your response was INCORRECT"
+
+    // Generate response message
+    let resultsMessage = '';
+    if (response == correctAnswer) {
+        resultsMessage = "You answered " + response + " in " + responseTime + " seconds. " + correctResponse;
+    } else {
+        resultsMessage = "You answered " + response + " in " + responseTime + " seconds. " + incorrectResponse;
+    }
+
+    // Report the results
+    results.innerHTML = resultsMessage;
+    // Get rid of instructions and question prompt
+    form.style.display = 'none';
+});
 
 /* let response = prompt('What is your name?');
 let count = response.length;
@@ -79,7 +113,7 @@ else {
     alert("The number you entered was odd");
 } */
 
-// Generating variables for use
+/* // Generating variables for use
 alert("In this experiment we will measure your response time. You will be shown a series of simple math equations. Answer these equations as quickly and accurately as you can.");
 let start = Date.now();
 let math1 = Math.floor(Math.random() * 10) + 1
@@ -131,5 +165,5 @@ if (answer == correctAnswer) {
     alert("You answered " + answer + " in " + responseTime + " seconds. " + incorrectResponse);
 }
 // Closing alert
-alert("Thank you for your participation!");
+alert("Thank you for your participation!"); */
 
