@@ -34,7 +34,7 @@ console.log(over18 || hasGuardianApproval);  */
 /* let count = 8;
 console.log(count % 2 == 0); */
 
-// Generate variables
+/* // Generate variables
 let num1 = Math.floor(Math.random() * 10) + 1;
 let num2 = Math.floor(Math.random() * 10) + 1;
 let correctAnswer = (num1 + num2)
@@ -53,4 +53,15 @@ if (response == correctAnswer) {
     feedback = 'Incorrect.';
 }
 
-alert(feedback + ' The expected answer is ' + correctAnswer + '.');
+alert(feedback + ' The expected answer is ' + correctAnswer + '.'); */
+
+let age = prompt('How old are you?');
+if (age < 12) {
+    alert('Child');
+}
+else if (age < 18 && age >= 12) {
+    alert('Teenager');
+}
+else {
+    alert('Adult');
+}
