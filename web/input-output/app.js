@@ -22,4 +22,6 @@ form.addEventListener('submit', function (event) {
 
     // Report the results
     results.innerHTML = resultsMessage;
+
+    form.style.display = 'none';
 });
