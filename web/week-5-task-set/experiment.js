@@ -18,24 +18,27 @@ timeline.push(welcomeTrial);
 
 // Experimental Trial
 for (let condition of conditions) {
+
+    let choices = [condition.correctAnswer, condition.altAnswer];
+    choices = jsPsych.randomization.repeat(choices, 1);
+
     let mathTrial = {
-        type: jsPsychSurveyHtmlForm,
-        preamble: `
-            <p>What is ${condition.num1} + ${condition.num2}?</p>
-            `,
-        html: `<p><input type='text' name='answer' id='answer'></p>`,
-        autofocus: 'answer', // id of the field we want to auto-focus on when the trial starts
-        button_label: 'Submit Answer',
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `<p>What is ${condition.num1} + ${condition.num2}?</p>`,
+        choices: choices,
         data: {
             collect: true,
         },
-        // Whether correct or incorrect
         on_finish: function (data) {
             data.num1 = condition.num1;
             data.num2 = condition.num2;
             data.correctAnswer = condition.correctAnswer;
-            data.answer = data.response.answer;
-            if (data.answer == condition.correctAnswer) {
+            data.altAnswer = condition.altAnswer
+            data.answer = data.response
+            if (data.answer == 0 && condition.correctAnswer == choices[0]) {
+                data.correct = true;
+            }
+            else if (data.answer == 1 && condition.correctAnswer == choices[1]) {
                 data.correct = true;
             }
             else {
@@ -45,7 +48,6 @@ for (let condition of conditions) {
     }
     timeline.push(mathTrial);
 }
-
 
 // Debrief
 let debriefTrial = {
@@ -59,7 +61,7 @@ let debriefTrial = {
         let data = jsPsych.data
             .get()
             .filter({ collect: true })
-            .ignore(['collect', 'response', 'trial_type', 'trial_index', 'plugin_version'])
+            .ignore(['collect', 'stimulus', 'response', 'trial_type', 'trial_index', 'plugin_version'])
             .csv();
         console.log(data);
     }
