@@ -16,6 +16,24 @@ let welcomeTrial = {
 
 timeline.push(welcomeTrial);
 
+// Survey
+let likert_scale = [
+    "Strongly Disagree",
+    "Disagree",
+    "Neutral",
+    "Agree",
+    "Strongly Agree"
+];
+
+let surveyTrial = {
+    type: jsPsychSurveyLikert,
+    questions: [
+        { prompt: "I enjoy solving math problems.", name: 'Enjoy', labels: likert_scale },
+        { prompt: "I find math easy.", name: 'Easy', labels: likert_scale },
+    ],
+};
+timeline.push(surveyTrial)
+
 // Experimental Trial
 for (let condition of conditions) {
     let mathTrial = {
