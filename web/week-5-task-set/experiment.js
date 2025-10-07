@@ -34,6 +34,16 @@ for (let condition of conditions) {
             data.num2 = condition.num2;
             data.correctAnswer = condition.correctAnswer;
             data.altAnswer = condition.altAnswer
+
+            // use response index to see what choice they picked and if it matched the correct answer
+            // data.correct = choices[data.response] == condition.correctAnswer
+            // if (choices[data.response] == condiiton.correctAnswer) {
+            // data.correct = true;
+            // }
+            // else {
+            //     data.correct = false;
+            // }
+
             data.answer = data.response
             if (data.answer == 0 && condition.correctAnswer == choices[0]) {
                 data.correct = true;
@@ -45,7 +55,7 @@ for (let condition of conditions) {
                 data.correct = false;
             }
         }
-    }
+    };
     timeline.push(mathTrial);
 }
 
