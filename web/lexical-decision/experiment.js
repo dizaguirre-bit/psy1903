@@ -2,16 +2,16 @@ let jsPsych = initJsPsych();
 
 let timeline = [];
 
-colors = jsPsych.randomization.repeat(['red', 'green', 'blue'], 1);
-let color = colors.pop();
+// colors = jsPsych.randomization.repeat(['red', 'green', 'blue'], 1);
+// let color = colors.pop();
 
-let trial = {
-    type: jsPsychHtmlKeyboardResponse,
-    choices: ['f', 'j'],
-    stimulus: `
-        <span class = '${color}'>ball</span>`
-    ,
-};
+// let trial = {
+//     type: jsPsychHtmlKeyboardResponse,
+//     choices: ['f', 'j'],
+//     stimulus: `
+//         <span class = '${color}'>ball</span>`
+//     ,
+// };
 
 // timeline.push(trial);
 
@@ -88,7 +88,7 @@ let resultsTrial = {
     on_start: function () {
         //  ⭐ Update the following three values as appropriate ⭐
         let prefix = 'lexical-decision';
-        let dataPipeExperimentId = 'your-experiment-id-here';
+        let dataPipeExperimentId = '6sZBOP0hZCH6';
         let forceOSFSave = false;
 
         // Filter and retrieve results as CSV data
@@ -125,7 +125,7 @@ let resultsTrial = {
             }),
         }).then(data => {
             console.log(data);
-            // jsPsych.finishTrial();
+            jsPsych.finishTrial();
         })
     }
 }
