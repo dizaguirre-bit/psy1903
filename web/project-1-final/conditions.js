@@ -1,4 +1,9 @@
 // Initialize an empty array you will populate with your conditions
+let practice = [
+    { example: 'hgfj' },
+    { example: 'pokl' },
+    { example: 'gqyu' },
+]
 let words = [
 
     { word: 'cube', valence: 'neutral' },
@@ -20,4 +25,14 @@ let words = [
     { word: 'bomb', valence: 'threatening' },
     { word: 'died', valence: 'threatening' },
     { word: 'rage', valence: 'threatening' },
+    { word: 'glee', valence: 'positive' },
+    { word: 'warm', valence: 'positive' },
+    { word: 'kind', valence: 'positive' },
+    { word: 'love', valence: 'positive' },
+    { word: 'hope', valence: 'positive' },
+    { word: 'hero', valence: 'positive' },
+    { word: 'cure', valence: 'positive' },
+    { word: 'wise', valence: 'positive' },
+    { word: 'sexy', valence: 'positive' },
+    { word: 'idea', valence: 'positive' },
 ];
