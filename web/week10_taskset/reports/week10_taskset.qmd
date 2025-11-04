@@ -20,3 +20,29 @@ head(experiment_data)
 ## Check the structure of the dataset
 str(experiment_data)
 ```
+#### Q2: Functions ------------------------------------------------
+
+```{r}
+## Generate one or more random numbers between min and max (defaults: one number between 1–10)
+getRandomNumber <- function(min = 1, max = 10, number = 1) {
+  sample(min:max, number)
+}
+```
+
+```{r}
+## Classify reaction times into "Fast", "Slow", or "Unknown" (default threshold = 500ms)
+experiment_data$rt_category <- NA
+classify_rt <- function (rt, threshold = 500) {
+  if (!is.numeric(rt)) {
+    stop("Error: 'rt' must be numeric.")
+  }
+  if (!is.numeric(threshold) || length(threshold) != 1) {
+    stop("Error: 'threshold' must be a single numeric value.")
+  }
+  ifelse(
+  is.na(rt), "Unknown",
+  ifelse (rt < threshold, "Fast", "Slow")
+  )
+}
+experiment_data$rt_category <- classify_rt(experiment_data$rt, 500)
+```
