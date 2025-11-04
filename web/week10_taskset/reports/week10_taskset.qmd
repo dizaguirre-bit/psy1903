@@ -1,6 +1,6 @@
 ---
 title: "Week 10 Task Set"
-author: "Your Name"
+author: "Deano Izaguirre"
 format: html
 execute:
   echo: true
@@ -31,18 +31,142 @@ getRandomNumber <- function(min = 1, max = 10, number = 1) {
 
 ```{r}
 ## Classify reaction times into "Fast", "Slow", or "Unknown" (default threshold = 500ms)
-experiment_data$rt_category <- NA
+experiment_data$rt_category <- NA ## create new column for rt category
 classify_rt <- function (rt, threshold = 500) {
-  if (!is.numeric(rt)) {
+  if (!is.numeric(rt)) { ## input validation for making sure rt is numeric
     stop("Error: 'rt' must be numeric.")
-  }
-  if (!is.numeric(threshold) || length(threshold) != 1) {
+  } 
+  if (!is.numeric(threshold) || length(threshold) != 1) { ## input validation for making sure threshold is single numeric value
     stop("Error: 'threshold' must be a single numeric value.")
   }
-  ifelse(
+  ifelse( ## conditional code for categorizing reaction times, vectorized for efficiency
   is.na(rt), "Unknown",
   ifelse (rt < threshold, "Fast", "Slow")
   )
 }
 experiment_data$rt_category <- classify_rt(experiment_data$rt, 500)
+```
+
+#### Q3: Loops vs. Vectorization -----------------------------
+```{r}
+experiment_data$age <- NA ## create new column called age and populate w/ NA
+```
+
+```{r}
+for (i in 1:nrow(experiment_data)) {
+experiment_data[i, "age"] <- getRandomNumber(18, 65, 1) ## sample a random number for as many rows as in the "age" column
+}
+head(experiment_data)
+```
+
+```{r}
+experiment_data$age <- sample(18:65, replace = TRUE, nrow(experiment_data)) ## sample as many rows as are in the df
+head(experiment_data)
+```
+
+## Q4: Control Structures on Data Frames ---------------------------
+```{r}
+experiment_data$rt_category_loop <- NA ## create an empty column and populate with NA
+for (i in 1:nrow(experiment_data)) { ## fill empty column row by row using classify_rt
+ experiment_data[i, "rt_category_loop"] <- classify_rt(experiment_data[i, "rt"], 500) ## classify using individual value of every row of rt
+}
+```
+
+```{r}
+experiment_data$rt_category_vec <- NA ## create empty column and populate w/ NA
+experiment_data$rt_category_vec <- classify_rt(experiment_data$rt, threshold = 500) ## fill using classify_rt
+```
+
+```{r}
+table(loop = experiment_data$rt_category_loop,
+      vec  = experiment_data$rt_category_vec,
+      useNA = "ifany")
+```
+#### Q5: Debugging Functions -----------------------------
+```{r}
+## Create Buggy Function
+threshold <- 500
+
+flag_fast <- function(rt_vector) {
+  rt_vector < threshold
+}
+
+flag_fast(experiment_data$rt)
+```
+# ```{r}
+# rm(threshold)
+# 
+# flag_fast(experiment_data$rt)
+# ```
+```{r}
+flag_fast <- function(rt_vector, threshold = 500) {
+  rt_vector < threshold
+}
+# rm(threshold)
+
+flag_fast(experiment_data$rt)
+```
+#### Q6: Debugging Tools in Action -----------------------------
+```{r}
+subject_means <- tapply(experiment_data$rt,
+                        experiment_data$condition,
+                        mean)
+print(paste("Mean for control:", subject_means["control"]))
+print(paste("Mean for incongruent:", subject_means["incongruent"]))
+```
+```{r}
+# How many NAs overall?
+sum(is.na(experiment_data$rt))
+
+# How many NAs by condition?
+tapply(is.na(experiment_data$rt), experiment_data$condition, sum)
+
+# Optional: quick sanity checks
+summary(experiment_data$rt)
+with(experiment_data, table(condition, is.na(rt)))
+```
+```{r}
+subject_means <- tapply(experiment_data$rt,
+                        experiment_data$condition,
+                        function(x) mean(x, na.rm = TRUE)) ## define anonymous function to be used in tapply so we can apply mean AND na.rm at the same time
+print(paste("Mean for control:", subject_means["control"]))
+print(paste("Mean for incongruent:", subject_means["incongruent"]))
+```
+
+#### Q7: Using AI for Debugging or Refactoring -----------------------
+### ```{r}
+### subject_means <- tapply(experiment_data$rt, ## reusing this buggy code
+                        experiment_data$condition,
+                        mean)
+### print(paste("Mean for control:", subject_means["control"]))
+### print(paste("Mean for incongruent:", subject_means["incongruent"]))
+### ```
+
+## Evaluating ChatGPT's response: The AI did a good job breaking down the problem into digestible and easy-to-follow instructions, offering a general explanation for what went wrong first before going into detail. I did verify because we were taught to use an anonymous function to include na.rm in tapply, so I was a bit skeptical that it would work, but tapply still worked just fine even without the anonymous function. I made sure the outcome was correct by comparing it with this anynomous function path that I used earlier to make sure I got the same result.
+
+```{r}
+## fixed code from ChatGPT
+subject_means <- tapply(experiment_data$rt,
+                        experiment_data$condition,
+                        mean,
+                        na.rm = TRUE)
+print(paste("Mean for control:", subject_means["control"]))
+print(paste("Mean for incongruent:", subject_means["incongruent"]))
+```
+
+#### Q8: Saving and Reloading Objects -----------------------------
+```{r}
+write.csv(experiment_data, "../data/cleaned/experiment_data.csv", row.names = FALSE) ## save as .csv
+
+saveRDS(experiment_data, "../data/cleaned/experiment_data.rds") ## save as .rds
+```
+
+```{r}
+save(experiment_data, subject_means, file = "../data/raw/objects.RData") ## save as 
+```
+
+
+```{r}
+rm(list = ls())
+load("../data/cleaned/objects.RData")
 ```
