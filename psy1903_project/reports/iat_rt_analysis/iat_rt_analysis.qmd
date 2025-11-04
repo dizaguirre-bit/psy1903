@@ -1,0 +1,14 @@
+---
+title: "IAT Reaction Time Analysis"
+author: "Deano Izaguirre"
+format: html
+---
+## Introduction
+In this report, we analyze reaction times from an Implicit Association Test.
+
+```{r}
+iat_data <- read.csv("../../data/raw/iat_data.csv")
+mean(iat_data$rt, na.rm = TRUE)
+```
+
+The average reaction time was `r round(mean(iat_data$rt, na.rm = TRUE), 2)` milliseconds.
