@@ -1,0 +1,79 @@
+---
+title: "Week 11 Task Set"
+author: "Deano Izaguirre"
+format: html
+execute:
+  echo: true
+  warning: true
+  message: false
+---
+
+For this task set, I mainly followed the order of the questions for my workflow. This meant that, after I created the project structure, I imported the dataset from OSF first, using the script we got. I used list.files() to double check that this worked correctly. After that, I added the concept checks to the Quarto report (below). Then, I started with extracting a subject_id: first, I tested it in a format where it would work on a singular file, e.g calling on a specific .csv, then once that worked I moved on to translating it into a function in my process_participant script. I followed this workflow: test on individual participant .csv and then translate it into a function for the following compute_rt_if_missing function, score_questionnaire function, and summarize_behavior function. I synthesized all this work with the process_participant function, where I tested it by sourcing each function individually and then running process_participant on a single .csv file. For Q8, though, my workflow changed a bit. Because I kept getting errors, I would go back to my individual functions and rework them with pertinence to the errors I was getting. As such, I had to rewrite my compute_rt_if_missing function, my score_questionnaire function, and eventually my summarize_behavior function too. Here, when I would come across an error, I would start with traceback(), then open and analyze the data frame if I was provided one (sometimes using names() as a shortcut for this). Eventually, I got it all to work.
+
+For missing data that was replaceable, like the missing RTs, I used the function compute_rt_if_missing; otherwise I would leave the NAs as is until they were removed in functions like sum() or mean() with na.rm = TRUE. This meant that the missing values didn't get in the way of my data manipulation, and that people could clearly follow what I was doing with the NAs and why if they looked at my code. 
+
+#### Concept Check
++ Q1: What does source("scripts/score_questionnaire.R") enable in your workflow?
+  + Source() essentially reads and runs the entire script of score_questionnaire.r and thus allows us to call upon the function score_questionnaire() to be used in our workflow. 
++ Q2: Why is modularizing your code into multiple scripts considered a best practice?
+  + This is because it helps promote clarity (each script has a single unique purpose), reusability (functions process new data w/o needing to rewrite), scalability (modularizing lets us apply functions across many files w/ lapply()) and reproducibility (putting everything into a Quarto report shows what's going on and re-runs consistently). 
++ Q3: What information does traceback() provide after an error?
+  + traceback() shows the exact call of the last error that appears in your code.
++ Q4: When you read multiple .csv files into R, how can using str() or names() before combining them help you prevent or debug errors later in your workflow?
+  + str() and names() can reveal the data types and names of the files, and specifically of the columns within them. When we think about combining them later on, we'll have to consider that the columns we want to combine have matching data types and/or names, otherwise it won't work. str() and names() would reveal these differences before we go about manipulating or cleaning. 
++ Q5: When you run source("scripts/process_participant.R") inside your Quarto document, nothing prints in the Console.How can you check whether your function actually loaded correctly into your environment, and why is this step important before calling it in later code?
+  + Using ls() and objects will themselves return the objects in a specified environment, so if your function loaded correctly, it should appear after calling these functions. Calling the function name will do the same, although it will also give the function code itself instead of just the function name as a character vector.
+
+#### Load packages ------------------------------------------------------------
+```{r}
+if (!require("pacman")) {install.packages("pacman"); require("pacman")}
+p_load("jsonlite", "ggplot2")
+```
+
+#### Load functions ------------------------------------------------------------
+```{r}
+source("../scripts/compute_rt_if_missing.R")
+source("../scripts/score_questionnaire.R")
+source("../scripts/summarize_behavior.R")
+source("../scripts/process_participant.R")
+```
+
+#### 1) Find files -------------------------------------------------------------
+```{r}
+# Prefer a pattern to avoid accidentally pulling other CSVs
+file_list <- list.files(
+  here::here("data", "raw"),
+  pattern = "^est-experiment-.*\\.csv$",
+  full.names = FALSE
+)
+```
+
+#### 2) Apply our participant processor ---------------------------------------
+```{r}
+participant_rows <- lapply(file_list, process_participant)
+```
+
+#### 3) Combine into one study-level data frame --------------------------------
+```{r}
+study_level <- do.call(rbind, participant_rows)
+```
+
+#### 4) Save combined outputs --------------------------------------------------
+```{r}
+dir.create("../data/cleaned", recursive = TRUE, showWarnings = FALSE)
+write.csv(study_level, "../data/cleaned/study_level.csv", row.names = FALSE)
+saveRDS(study_level, "../data/cleaned/study_level.rds")
+```
+
+#### 5) Quick sanity check -----------------------------------------------------
+```{r}
+stopifnot(nrow(study_level) == length(file_list))
+head(study_level)
+```
+
+```{r}
+print(study_level)
+```
+
+The mean RT across the study is `r round(mean(study_level$behavior.mean_rt_correct, na.rm = TRUE), 3)` ms,  
+and the mean accuracy is `r round(mean(study_level$behavior.mean_accuracy, na.rm = TRUE), 3)`.
