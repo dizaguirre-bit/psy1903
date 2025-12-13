@@ -1,0 +1,27 @@
+---
+title: "ai-refactor"
+format: html
+---
+## AI Optimization and Comparison
+
++ A brief description of the original issues
+  + In terms of issues with the code that caused bugs, a majority of them were simply due to typos in the code that disrupted the overall consistency. Variable and column names, for example, were misspelled or not case sensitive. These were significant enough disruptions, though, that the code wouldn't run as expected, often halting completely. In terms of refactoring, there were a unique set of issues, which ranged from unused code, to for lops that could've been replaced with a vectorized equivalent, and indexing that needed some improvement. 
+  
++ A summary of your refactoring choices including what you changed and why you changed it.
+  + I changed certain variable names in `build_participant_wide.R` simply because they were unclear with regards to what purpose they served in the overall function. Understanding the code gave a sense of what they were, but it didn't help the code's clarity. In the same script, I also refactored by replacing a for loop with a vectorized function. I did this because it managed to accomplish the same task in a single line of code as compared to the four lines that were originally needed, with more clarity on what was exactly being done. Finally, there were some issues in `summarize_behavior.R` that I also addressed. The first of these was indexing that wasn't clear enough--I changed the code to reference specific column names and also replaced the hard-coding in the code with functional arguments, so that they could be later called or changed when using the function. This meant that overall the code was more legible and more flexible. The last refactoring changes I made were deleting code that wasn't ever used downstream, within the script or in the project as a whole. They served no purpose, so they were simply clutter at that point. 
+  
++ A list or short set of bullet points showing the optimization ideas the AI gave for the unedited project.
+  + Using function arguments instead of hard coding in `summarize_behavior.R`.
+  + Vectorize rt_centering instead of looping in `summarize_behavior.R`.
+  + Replacing positional indices with explicit column names in `summarize_behavior.R`.
+  + Using lapply in `build_participant_wide.R`.
+  
+  
++ A list or short set of bullet points showing the optimization ideas the AI gave for your refactored version.
+  + Fix the file-path workflow between `build_participant_wide()` and `import_and_process()`
+  + Make `score_questionnaire()`’s interface consistent and safer
+  + DRY up the IAT category coding across functions
+  + Add explicit “no usable trials” handling in summarize_behavior()
+  
++ Comparison section
+  + As it turns out, the AI and I were pretty much on the same page when it came to debugging. There were overlaps in refactoring, too, but it seems that this is where we differed. I think it makes sense to me that the AI wouldn't consider dropping a piece of code--hence it's decision to vectorize rt_centering instead of looping it completely--but it also made me rethink whether or not I made the right decision in refactoring there. It also didn't make many (if any) changes to variable names either, which was a bit of a surprise to me. I will say that most of the initial refactoring was the same--using function arguments, replacing positional indicies, and using lapply stood out as the issues that were exactly the same--but in terms of refactoring beyond that, especially when I gave it my refactored version, I started to feel like it was looking for anything to be able to comment on. I think that it makes sense, since the AI doesn't understand that this is being done for a class project and there are only a certain amount of tasks to be done, but I'm not sure if I was able to learn from its comments on my refactored version. They seemed to be answering questions I had never even asked--perhaps they'll be useful in the future or with more complicated datasets. In general, though, it seems that AI follows formatting convention to a T, which does really help readability, and is something I can employ, so I'll definitely be taking that along with the other things I've learned. Overall, this was a super interesting experience!
